@@ -3,7 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
 	id 'war'
-	id 'jococo'
+	id 'jacoco'
 }
 
 group = 'com.devops'
@@ -26,26 +26,25 @@ dependencies {
 }
 
 test {
-	useJUnitPlatform()
-}
-test {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
+	useJUnitPlatform()    
+	finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
-jacocoTestReport { 
-	dependsOn test 
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
 
-jacoco { 
-	toolVersion = "0.8.5" 
-	reportsDir = file("build/reports/jacoco") 
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("build/reports/jacoco")
 }
 
-jacocoTestReport { 
-	reports { 
-		xml.enabled true 
-		csv.enabled false 
-		html.destination file("${buildDir}/jacocoHtml") 
-	} 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
+
