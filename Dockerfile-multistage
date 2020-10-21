@@ -1,0 +1,14 @@
+#docker build -t juliancho923/api-calculadora:alpha-1.0  --file Dockerfile-multistage .
+FROM gradle:6.6.1 as builder
+LABEL stage=builder
+WORKDIR /myapp/
+COPY . .
+RUN ./gradlew clean compileJava build
+#docker image prune --filter label=stage=builder
+
+
+FROM openjdk:8-jre-alpine3.9
+WORKDIR /myapp/
+COPY --from=builder /myapp/build/libs/calculadoraAPI-0.0.1-SNAPSHOT.war .
+EXPOSE 5081
+ENTRYPOINT ["java", "-jar", "calculadoraAPI-0.0.1-SNAPSHOT.war"]
